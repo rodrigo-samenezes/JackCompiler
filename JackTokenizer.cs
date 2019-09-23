@@ -15,6 +15,13 @@ namespace Jack
             intConst
         }
 
+        public enum JackKeywordTypes {
+            CLASS, CONSTRUCTOR, FUNCTION, METHOD,FIELD, STATIC, VAR, INT, CHAR, BOOLEAN,
+            VOID, TRUE, FALSE, NULL, THIS, LET, DO, IF, ELSE, WHILE, RETURN
+        }
+
+
+
         private class ClassifiedJackToken {
             private static string[] RESERVED_WORDS = {
                 "class", "constructor", "function",
@@ -25,7 +32,7 @@ namespace Jack
             };
 
             private static string[] SYMBOLS = {
-                "{", "}", "(", ")", "[", "]", ". ", ", ", "; ", "+", "-", "*",
+                "{", "}", "(", ")", "[", "]", ".", ",", ";", "+", "-", "*",
                 "/", "&", "|", "<", ">", "=", "~"
             };
 
@@ -52,18 +59,36 @@ namespace Jack
                 }
             }
 
+            public JackKeywordTypes parseKeyWord() {
+                if (this.type != JackTokenClass.keyword)
+                    throw new Exception("You cannot parse to keyword a '" + this.type.ToString() + "' token");
+                return (JackKeywordTypes)Enum.Parse(typeof(JackKeywordTypes), this.value.ToUpper());
+            }
+
             public char parseChar() {
                 if (this.type != JackTokenClass.symbol)
                     throw new Exception("You cannot parse to char a '" + this.type.ToString() + "' token");
                 return this.value[0];
+            }
+
+            public string parseStringVal() {
+                if (this.type != JackTokenClass.stringConst)
+                    throw new Exception("You cannot parse to stringVal a '" + this.type.ToString() + "' token");
+                return this.value.Replace("\"", "");
+            }
+
+            public int parseInt() {
+                if (this.type != JackTokenClass.intConst)
+                    throw new Exception("You cannot parse to intConst a '" + this.type.ToString() + "' token");
+                return this.intValue;
             }
         }
         
         
 
 
-        public string code;
-        public string[] tokens;
+        private string code;
+        private string[] tokens;
         private ClassifiedJackToken[] classifiedTokens;
 
         private int currentTokenIndex;
@@ -78,7 +103,7 @@ namespace Jack
             this.removeComents();
             this.findTokens();
             this.classifyTokens();
-            this.currentTokenIndex = -1;
+            this.currentTokenIndex = 0;
         }
 
         private void removeComents(){
@@ -109,21 +134,23 @@ namespace Jack
             return this.currentTokenIndex < this.tokens.Length;
         }
 
-        public void advance() {
-            if (!this.hasMoreTokens()) {
-                throw new Exception("No more tokens available");
+        public bool advance() {
+            if(this.currentTokenIndex < this.tokens.Length){
+                this.currentToken = this.classifiedTokens[this.currentTokenIndex];
+                this.currentTokenIndex++;
+                return true;
             }
-            
-            this.currentTokenIndex++;
-            this.currentToken = this.classifiedTokens[this.currentTokenIndex];
+            else {
+                return false;
+            }
         }
 
         public JackTokenClass tokenType() {
             return this.currentToken.type;
         }
 
-        public string keyWord() {
-            return this.currentToken.value;
+        public JackKeywordTypes keyWord() {
+            return this.currentToken.parseKeyWord();
         }
 
         public char symbol() {
@@ -135,7 +162,11 @@ namespace Jack
         }
 
         public int intVal() {
-            return 0;
+            return this.currentToken.parseInt();
+        }
+
+        public string stringVal() {
+            return this.currentToken.parseStringVal();
         }
 
         
