@@ -7,7 +7,7 @@ namespace Jack
 {
     public class JackTokenizer
     {
-        public enum JackTokenClass {
+        public enum JackTokenType {
             keyword,
             identifier,
             symbol,
@@ -22,7 +22,7 @@ namespace Jack
 
 
 
-        private class ClassifiedJackToken {
+        public class ClassifiedJackToken {
             private static string[] RESERVED_WORDS = {
                 "class", "constructor", "function",
                 "method", "field", "static", "var", "int",
@@ -36,52 +36,62 @@ namespace Jack
                 "/", "&", "|", "<", ">", "=", "~"
             };
 
-            public JackTokenClass type;
+            public JackTokenType type;
             public string value;
             private int intValue;
 
             public ClassifiedJackToken(string token) {
                 this.value = token;
                 if (RESERVED_WORDS.Contains(token)) {
-                    this.type = JackTokenClass.keyword;
+                    this.type = JackTokenType.keyword;
                 }
                 else if (token.StartsWith("\"") && token.EndsWith("\"")) {
-                    this.type = JackTokenClass.stringConst;
+                    this.type = JackTokenType.stringConst;
                 }
                 else if (SYMBOLS.Contains(token)) {
-                    this.type = JackTokenClass.symbol;
+                    this.type = JackTokenType.symbol;
                 }
                 else if (int.TryParse(token, out this.intValue)) {
-                    this.type = JackTokenClass.intConst;
+                    this.type = JackTokenType.intConst;
                 }
                 else {
-                    this.type = JackTokenClass.identifier;
+                    this.type = JackTokenType.identifier;
                 }
             }
 
-            public JackKeywordTypes parseKeyWord() {
-                if (this.type != JackTokenClass.keyword)
+            public JackKeywordTypes ParseKeyWord() {
+                if (this.type != JackTokenType.keyword)
                     throw new Exception("You cannot parse to keyword a '" + this.type.ToString() + "' token");
                 return (JackKeywordTypes)Enum.Parse(typeof(JackKeywordTypes), this.value.ToUpper());
             }
 
-            public char parseChar() {
-                if (this.type != JackTokenClass.symbol)
+            public char ParseChar() {
+                if (this.type != JackTokenType.symbol)
                     throw new Exception("You cannot parse to char a '" + this.type.ToString() + "' token");
                 return this.value[0];
             }
 
-            public string parseStringVal() {
-                if (this.type != JackTokenClass.stringConst)
+            public string ParseStringVal() {
+                if (this.type != JackTokenType.stringConst)
                     throw new Exception("You cannot parse to stringVal a '" + this.type.ToString() + "' token");
                 return this.value.Replace("\"", "");
             }
 
-            public int parseInt() {
-                if (this.type != JackTokenClass.intConst)
+            public int ParseInt() {
+                if (this.type != JackTokenType.intConst)
                     throw new Exception("You cannot parse to intConst a '" + this.type.ToString() + "' token");
                 return this.intValue;
             }
+
+            public JackTokenType TokenType() {
+                return this.type;
+            }
+
+            public string Identifier() {
+                return this.value;
+            }
+
+            
         }
         
         
@@ -100,18 +110,18 @@ namespace Jack
             {
                 this.code = sr.ReadToEnd();
             }
-            this.removeComents();
-            this.findTokens();
-            this.classifyTokens();
+            this.RemoveComents();
+            this.FindTokens();
+            this.ClassifyTokens();
             this.currentTokenIndex = 0;
         }
 
-        private void removeComents(){
-            Regex rx = new Regex(@"//.*", RegexOptions.Compiled);
+        private void RemoveComents(){
+            Regex rx = new Regex(@"(//.*)|(/\*[\s\S]*\*/)*", RegexOptions.Compiled);
             this.code = rx.Replace(this.code, "");
         }
 
-        private void findTokens() {
+        private void FindTokens() {
             Regex rx = new Regex("\\{|\\}|\\(|\\)|\\[|\\]|\\.|\\,|;|\\+|-|\\*|\\/|&|\\||<|>|=|~|(\".*\")|(([a-z]|[A-Z]|_)+([a-z]|[A-Z]|_|[0-9])*)|[0-9]+");
             MatchCollection matches = rx.Matches(this.code);
             this.tokens = new string[matches.Count];
@@ -121,7 +131,7 @@ namespace Jack
             }
         }
 
-        private void classifyTokens() {
+        private void ClassifyTokens() {
             this.classifiedTokens = new ClassifiedJackToken[this.tokens.Length];
             int i = 0;
             foreach(var tk in this.tokens) 
@@ -130,11 +140,11 @@ namespace Jack
             }
         }
 
-        public bool hasMoreTokens() {
+        public bool HasMoreTokens() {
             return this.currentTokenIndex < this.tokens.Length;
         }
 
-        public bool advance() {
+        public bool Advance() {
             if(this.currentTokenIndex < this.tokens.Length){
                 this.currentToken = this.classifiedTokens[this.currentTokenIndex];
                 this.currentTokenIndex++;
@@ -145,28 +155,32 @@ namespace Jack
             }
         }
 
-        public JackTokenClass tokenType() {
-            return this.currentToken.type;
+        public JackTokenType TokenType() {
+            return this.currentToken.TokenType();
         }
 
-        public JackKeywordTypes keyWord() {
-            return this.currentToken.parseKeyWord();
+        public JackKeywordTypes KeyWord() {
+            return this.currentToken.ParseKeyWord();
         }
 
-        public char symbol() {
-            return this.currentToken.parseChar();
+        public char Symbol() {
+            return this.currentToken.ParseChar();
         }
 
-        public string identifier() {
+        public string Identifier() {
             return this.currentToken.value;
         }
 
-        public int intVal() {
-            return this.currentToken.parseInt();
+        public int IntVal() {
+            return this.currentToken.ParseInt();
         }
 
-        public string stringVal() {
-            return this.currentToken.parseStringVal();
+        public string StringVal() {
+            return this.currentToken.ParseStringVal();
+        }
+
+        public ClassifiedJackToken GetClassifiedToken() {
+                return this.currentToken;
         }
 
         

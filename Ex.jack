@@ -5,6 +5,13 @@
 
 // (Same as projects/09/Average/Main.jack)
 
+/*
+kjasjdhjsa djashiduag\db asiduabsjd asjhdjahj
+
+*/
+
+
+
 // Inputs some numbers and computes their average
 class Main {
    function void main() {

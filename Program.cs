@@ -9,29 +9,27 @@ namespace Jack
         private static char[] forbidenSymbols = {'<', '>', '&'};
         static void Main(string[] args)
         {
-
-
             Console.WriteLine("Iniciando");
             JackTokenizer jk = new JackTokenizer("Ex.jack");
             string xml = "<tokens>\n";
-            while (jk.advance()) {
-	            JackTokenizer.JackTokenClass tokenClass = jk.tokenType();
+            while (jk.Advance()) {
+	            JackTokenizer.JackTokenType tokenClass = jk.TokenType();
 	            xml += "<" + tokenClass.ToString() + ">";
 	            switch(tokenClass) {
-                    case JackTokenizer.JackTokenClass.identifier:
-                        xml += jk.identifier();
+                    case JackTokenizer.JackTokenType.identifier:
+                        xml += jk.Identifier();
                         break; 
-                    case JackTokenizer.JackTokenClass.intConst:
-                        xml += jk.intVal().ToString();
+                    case JackTokenizer.JackTokenType.intConst:
+                        xml += jk.IntVal().ToString();
                         break; 
-                    case JackTokenizer.JackTokenClass.keyword:
-                        xml += jk.keyWord().ToString().ToLower();
+                    case JackTokenizer.JackTokenType.keyword:
+                        xml += jk.KeyWord().ToString().ToLower();
                         break;
-                    case JackTokenizer.JackTokenClass.stringConst:
-                        xml += jk.stringVal();
+                    case JackTokenizer.JackTokenType.stringConst:
+                        xml += jk.StringVal();
                         break;
-                    case JackTokenizer.JackTokenClass.symbol:
-                        char sym = jk.symbol();
+                    case JackTokenizer.JackTokenType.symbol:
+                        char sym = jk.Symbol();
                         if (sym == '<')
                             xml += "&lt;";
                         else if (sym == '>')
@@ -39,7 +37,7 @@ namespace Jack
                         else if (sym == '&')
                             xml += "&amp;";
                         else 
-                            xml += jk.symbol();
+                            xml += jk.Symbol();
                         break; 
                 }
 	            xml += "</" + tokenClass.ToString() + ">\n";
