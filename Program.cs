@@ -9,7 +9,17 @@ namespace Jack
         private static char[] forbidenSymbols = {'<', '>', '&'};
         static void Main(string[] args)
         {
-            Console.WriteLine("Iniciando");
+            Main1(args);
+            Console.WriteLine("Iniciando Sintático");
+            CompilationEngine ce =  new CompilationEngine("Ex.jack");
+            ce.CompileClass();
+            File.WriteAllText("Ex.sintatico.xml", PrettyXml.Fire(ce.getXml()));
+            Console.WriteLine("Sintático FIM");
+        }
+
+        static void Main1(string[] args)
+        {
+            Console.WriteLine("Iniciando Tokens");
             JackTokenizer jk = new JackTokenizer("Ex.jack");
             string xml = "<tokens>\n";
             while (jk.Advance()) {
@@ -43,7 +53,9 @@ namespace Jack
 	            xml += "</" + tokenClass.ToString() + ">\n";
             }
             xml+= "</tokens>";
-            File.WriteAllText("tokens.xml", xml);
+            File.WriteAllText("Ex.tokens.xml", xml);
+            Console.WriteLine("Tokens FIM");
+
         }
     }
 }
