@@ -33,7 +33,9 @@ class SquareGame {
    method void run() {
       var char key;
       var boolean exit;
-      
+      var string str;
+
+      let str = "jsdh sds";
       let exit = key;
       while (exit) {
          while (key) {

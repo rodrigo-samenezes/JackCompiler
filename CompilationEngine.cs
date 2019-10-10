@@ -331,6 +331,7 @@ namespace Jack
             if (
                 nx.TokenType() == JackTokenizer.JackTokenType.intConst ||
                 nx.TokenType() == JackTokenizer.JackTokenType.identifier ||
+                nx.TokenType() == JackTokenizer.JackTokenType.stringConst ||
                 (nx.TokenType() == JackTokenizer.JackTokenType.keyword && keywordConstants.Contains(nx.ParseKeyWord()))
             )
             {
