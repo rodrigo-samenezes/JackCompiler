@@ -35,7 +35,7 @@ class SquareGame {
       var boolean exit;
       var string str;
 
-      let str = "jsdh sds";
+      let str = (("jsdh sds" + m.tomate(12, 15, tee())) + 12);
       let exit = key;
       while (exit) {
          while (key) {

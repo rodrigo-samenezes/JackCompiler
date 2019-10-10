@@ -13,7 +13,7 @@ namespace Jack
             JackTokenizer.JackKeywordTypes.THIS
         };
 
-        private char[] opSymbols = new char[] { '+' , '-' , '*' , '/' , '&' , '|' , '<' , '>' , '=' };
+        private char[] opSymbols = new char[] { '+', '-', '*', '/', '&', '|', '<', '>', '=' };
         private JackTokenizer tokenizer;
         private JackTokenizer.ClassifiedJackToken[] tokens;
         private int currentTokenIndex;
@@ -37,13 +37,13 @@ namespace Jack
             this.tokens = tokensList.ToArray();
         }
 
-        private JackTokenizer.ClassifiedJackToken Nx(bool increment = true)
+        private JackTokenizer.ClassifiedJackToken Nx(bool increment = true, int incrementValue = 1)
         {
-            var current = this.tokens[this.currentTokenIndex];
+            var current = this.tokens[this.currentTokenIndex + incrementValue - 1];
             if (increment)
             {
                 xml += current.toXml();
-                this.currentTokenIndex++;
+                this.currentTokenIndex += incrementValue;
             }
             return current;
         }
@@ -315,7 +315,8 @@ namespace Jack
             // op: '+' | '-' | '* | '/' | '&' | '|' | '<' | '>' | '='
             xml += "<expression>\n";
             this.CompileTerm();
-            if (Nx(increment: false).ExpectSymbol(this.opSymbols, throwException: false)){
+            if (Nx(increment: false).ExpectSymbol(this.opSymbols, throwException: false))
+            {
                 Nx();// op
                 this.CompileTerm();
             }
@@ -327,15 +328,49 @@ namespace Jack
             /* term: varName | varName '[' expression ']' | subroutineCall |
              */
             xml += "<term>\n";
-            var nx = Nx();
+            var nx = Nx(false);
             if (
                 nx.TokenType() == JackTokenizer.JackTokenType.intConst ||
                 nx.TokenType() == JackTokenizer.JackTokenType.identifier ||
                 nx.TokenType() == JackTokenizer.JackTokenType.stringConst ||
-                (nx.TokenType() == JackTokenizer.JackTokenType.keyword && keywordConstants.Contains(nx.ParseKeyWord()))
+                (nx.TokenType() == JackTokenizer.JackTokenType.keyword && keywordConstants.Contains(nx.ParseKeyWord())) ||
+                (nx.TokenType() == JackTokenizer.JackTokenType.symbol && nx.ExpectSymbol(new char[] { '(', '~', '-' }, false))
             )
             {
-                //if is constant
+                if (nx.TokenType() == JackTokenizer.JackTokenType.identifier)
+                {
+
+                    if (Nx(false, 2).ExpectSymbol('[', false))
+                    {
+                        Nx(); // identifier
+                        Nx(); // [
+                        this.CompileExpression();
+                        Nx().ExpectSymbol(']');
+                    }
+                    else if (Nx(false, 2).ExpectSymbol(new char[]{'(', '.'}, false))
+                    {
+                        this.CompileSubroutineCall();
+                    }
+                    else {
+                        Nx(); //pure identifier
+                    }
+                }
+                else if (nx.TokenType() == JackTokenizer.JackTokenType.symbol)
+                {
+                    Nx(); // '(' | unareOp
+                    if (nx.ExpectSymbol('(', false))
+                    {
+                        this.CompileExpression();
+                        Nx().ExpectSymbol(')');
+                    }
+                    else {
+                        this.CompileTerm();
+                    }
+                }
+                else {
+                    Nx();
+                }
+
             }
             else
             {
