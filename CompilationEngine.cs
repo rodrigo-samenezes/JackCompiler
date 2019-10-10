@@ -315,7 +315,7 @@ namespace Jack
             // op: '+' | '-' | '* | '/' | '&' | '|' | '<' | '>' | '='
             xml += "<expression>\n";
             this.CompileTerm();
-            if (Nx(increment: false).ExpectSymbol(this.opSymbols, throwException: false))
+            while(Nx(increment: false).ExpectSymbol(this.opSymbols, throwException: false))
             {
                 Nx();// op
                 this.CompileTerm();
