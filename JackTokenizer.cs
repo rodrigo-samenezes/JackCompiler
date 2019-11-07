@@ -117,7 +117,7 @@ namespace Jack
         }
 
         private void RemoveComents(){
-            Regex rx = new Regex(@"(//.*)|(/\*[\s\S]*\*/)*", RegexOptions.Compiled);
+            Regex rx = new Regex(@"(//.*)|(/\*[\s\S]*?\*/)*", RegexOptions.Compiled);
             this.code = rx.Replace(this.code, "");
         }
 
