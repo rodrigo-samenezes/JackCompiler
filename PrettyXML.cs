@@ -26,7 +26,7 @@ public static class PrettyXml
 
             return stringBuilder.ToString();
         }
-        catch (Exception ex) {
+        catch {
             return xml;
         }
 

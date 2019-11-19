@@ -1,0 +1,17 @@
+class Point {
+   field int x, y;
+
+   method int getX() {
+      return x;
+   }
+
+   method int getY() {
+      return y;
+   }
+
+   function int distance(Point other) {
+      var int X;
+      let X = (1 + 1);
+      return X;
+   }
+}

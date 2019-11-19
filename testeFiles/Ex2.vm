@@ -1,0 +1,9 @@
+﻿function Main.main 1
+push constant 12
+pop local 0
+push constant 13
+pop this 0
+push constant 12
+pop this 1
+push constant 0
+return

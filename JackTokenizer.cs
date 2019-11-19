@@ -104,9 +104,9 @@ namespace Jack
         private int currentTokenIndex;
         private ClassifiedJackToken currentToken;
 
-        public JackTokenizer(string fileName)
+        public JackTokenizer(string filepath)
         {
-            using (StreamReader sr = new StreamReader(fileName))
+            using (StreamReader sr = new StreamReader(filepath))
             {
                 this.code = sr.ReadToEnd();
             }

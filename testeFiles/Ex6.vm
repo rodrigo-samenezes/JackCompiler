@@ -1,0 +1,18 @@
+﻿function Main.main 1
+push constant 1
+push constant 2
+add
+push constant 3
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 5
+pop local 0
+goto IF_END0
+label IF_FALSE0
+push constant 2
+pop local 0
+label IF_END0
+push local 0
+return

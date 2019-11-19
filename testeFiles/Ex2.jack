@@ -1,0 +1,12 @@
+class Main {
+   field int x, y;
+   static int pointCount;
+
+   function void main() {
+      var int d;
+      let d = 12;
+      let x = 13;
+      let y = 12;
+      return;
+   }
+}

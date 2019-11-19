@@ -1,0 +1,11 @@
+class Main {
+   field int x;
+   field boolean b;
+
+   function void main() {
+      let x = -2;
+      let b = ~true;
+      let b = ~b;
+      return;
+   }
+}

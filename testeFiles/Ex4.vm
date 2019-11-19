@@ -1,0 +1,13 @@
+﻿function Main.main 0
+push constant 2
+neg
+pop this 0
+push constant 1
+neg
+not
+pop this 1
+push this 1
+not
+pop this 1
+push constant 0
+return

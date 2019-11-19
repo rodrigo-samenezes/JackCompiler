@@ -1,0 +1,15 @@
+class Main {
+   field int x, y;
+   static int pointCount;
+
+   function void main() {
+      var string str;
+      var Main obj;
+      var boolean flag;
+      let str = "abc";
+      let obj = null;
+      let flag = true;
+      let flag = false;
+      return;
+   }
+}

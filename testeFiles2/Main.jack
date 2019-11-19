@@ -1,0 +1,19 @@
+class Main {
+   field int x;
+   field Array vec;
+
+   constructor Main new () {
+      let x = 0;
+      let vec = Array.new(20);
+      return this;
+   }
+
+   method void main() {
+      var Array nvec;
+      let nvec = Array.new(5);
+      let vec[0] = x * 2;
+      let vec[1] = nvec;
+      let vec[nvec[1]] = nvec[2*vec[0]];
+      return;
+   }
+}
