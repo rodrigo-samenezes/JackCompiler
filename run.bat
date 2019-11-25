@@ -1,1 +1,1 @@
-dotnet run -- -c ./testeFiles -s -t
+dotnet run -- -c ./testeFiles2 -s -t

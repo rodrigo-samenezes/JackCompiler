@@ -548,7 +548,7 @@ namespace Jack
             if (nx.ParseChar() == '(') //metodo do objeto atual
             {
                 this.vm.WritePush(VMWriter.Segment.POINTER, 0);
-                vm_nArgs = this.CompileExpressionList();
+                vm_nArgs = this.CompileExpressionList() + 1;
                 Nx().ExpectSymbol(')');
                 vm_FunctionName = this.className + "." + vm_FunctionName;
             }

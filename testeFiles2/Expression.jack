@@ -1,0 +1,27 @@
+class Expression {
+
+
+    method void main () {
+         var int a;
+
+        if (a = 10) {
+            let a = 1;
+        } else {
+            let a=2;
+        }
+        return;
+    }
+
+        method void main2 () {
+         var int a;
+
+        if (a = 10) {
+            let a = 1;
+        } else {
+            let a=2;
+        }
+        return;
+    }
+
+
+}

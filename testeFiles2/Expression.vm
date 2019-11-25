@@ -1,0 +1,36 @@
+﻿function Expression.main 1
+push argument 0
+pop pointer 0
+push local 0
+push constant 10
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 1
+pop local 0
+goto IF_END0
+label IF_FALSE0
+push constant 2
+pop local 0
+label IF_END0
+push constant 0
+return
+function Expression.main2 1
+push argument 0
+pop pointer 0
+push local 0
+push constant 10
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 1
+pop local 0
+goto IF_END1
+label IF_FALSE1
+push constant 2
+pop local 0
+label IF_END1
+push constant 0
+return
